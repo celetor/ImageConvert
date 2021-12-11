@@ -8,6 +8,7 @@ from .writer import *
 
 # https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyheif
 # https://pypi.org/project/pyheif/
+# other lib(windows OS support): https://github.com/uploadcare/heif-image-plugin https://pypi.org/project/pillow-heif/
 
 __version__ = '0.6.0'
 
