@@ -1,96 +1,70 @@
 import os
-from io import BytesIO
-from PIL import Image
-import pyheif
-import whatimage
+from .HeifImagePlugin import Image
+from . import Const
 
 
 class ImageConvert():
     def __init__(self):
-        self.ext = ['jpg', 'jpeg', 'png', 'bmp', 'heic', 'webp']
-        self.image_list = []
-        self.count = 0
+        self._image_list = []
+        self._count = 0
 
     def _mkdir(self, path):
-        _path = os.path.normpath(path)
-        if not os.path.exists(_path):
-            os.makedirs(_path)
-        return _path
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
 
     def _find_image(self, sub_url):
-        for dir_sub in os.listdir(sub_url):
-            dir_sub = os.path.join(sub_url, dir_sub)
+        for direction_sub in os.listdir(sub_url):
+            dir_sub = os.path.join(sub_url, direction_sub)
             if os.path.isfile(dir_sub):
-                if dir_sub.rsplit(".", 1)[1].lower() in self.ext:
-                    self.image_list.append(dir_sub)
+                if direction_sub.find('.') > -1 and dir_sub.rsplit(".", 1)[1].upper() in Const.ext:
+                    self._image_list.append(dir_sub)
             else:
                 self._find_image(dir_sub)
 
     def find_all_image(self, sub_url):
-        self.image_list = []
+        self._image_list = []
         self._find_image(sub_url)
+        return self._image_list
 
     def convert(self, filepath, check, printf):
-        with open(filepath, 'rb') as f:
-            bytes_io = f.read()
-
-        if check:
-            new_path = filepath.rsplit(".", 1)[0] + '.jpg'
-        else:
-            father_path, file_name = os.path.split(filepath)
-            save_dir = os.path.join(father_path, 'convert')
-            self._mkdir(save_dir)
-            new_path = os.path.join(save_dir, file_name.rsplit(".", 1)[0] + '.jpg')
-
         try:
-            fmt = whatimage.identify_image(bytes_io)
-            if fmt == 'jpeg':
-                printf(f'{filepath}\t{fmt}图片跳过')
-            elif fmt in ['bmp', 'png', 'webp']:
-                if check:
-                    os.remove(filepath)
-                self.count += 1
-                pi = Image.open(BytesIO(bytes_io))
-                exif_data = pi.info.get('exif')
-                exif_data = b'' if exif_data is None else exif_data
-                pi = pi.convert("RGB")
-                pi.save(new_path, format="jpeg", quality=100, exif=exif_data)
-                printf(f'{self.count} {filepath}\t->\t{fmt} {new_path}')
-            elif fmt in ['heic']:
-                if check:
-                    os.remove(filepath)
-                self.count += 1
-                heif_file = pyheif.read(bytes_io)
-                exif_data = b''
-                for metadata in heif_file.metadata:
-                    if str(metadata['type']).lower() == 'exif':
-                        exif_data = metadata['data']
-                        break
-                pi = Image.frombytes(
-                    heif_file.mode,
-                    heif_file.size,
-                    heif_file.data,
-                    "raw",
-                    heif_file.mode,
-                    heif_file.stride,
-                )
-                # http://cn.voidcc.com/question/p-qzogslmj-ve.html
-                pi.save(new_path, format="jpeg", quality=100, exif=exif_data)
-                printf(f'{self.count} {filepath}\t->\t{fmt} {new_path}')
+            image = Image.open(filepath)
+            fmt = image.format
+            if fmt == 'JPEG':
+                printf(f'{filepath}  {fmt}\t图片跳过')
             else:
-                printf(f'{filepath}\t{fmt}无法转换跳过')
+                self._count += 1
+
+                if check:
+                    new_path = filepath.rsplit(".", 1)[0] + '.jpg'
+                    os.remove(filepath)
+                else:
+                    father_path, file_name = os.path.split(filepath)
+                    save_dir = os.path.join(father_path, 'convert')
+                    self._mkdir(save_dir)
+                    new_path = os.path.join(save_dir, file_name.rsplit(".", 1)[0] + '.jpg')
+
+                if image.mode != 'RGB':
+                    image = image.convert("RGB")
+                info = image.info
+                exif = info.get('exif')
+                if exif is not None:
+                    image.save(new_path, format='JPEG', quality=95, exif=exif)
+                else:
+                    image.save(new_path, format='JPEG', quality=95)
+                printf(f'{self._count} {filepath}  {fmt}\t->\t{new_path}')
         except Exception as e:
-            printf(f'{filepath}\t报错: {e}')
+            printf(f'{filepath}  报错: {e}')
 
     def convert_all(self, file_path, flag, printf=print):
         if os.path.isfile(file_path):
-            if file_path.rsplit(".", 1)[1].lower() in self.ext:
+            if file_path.rsplit(".", 1)[1].lower() in Const.ext:
                 self.convert(file_path, flag, printf)
         else:
-            self.find_all_image(file_path)
-            for img in self.image_list:
+            for img in self.find_all_image(file_path):
                 self.convert(img, flag, printf)
 
     def clear(self):
-        self.image_list = []
-        self.count = 0
+        self._image_list = []
+        self._count = 0

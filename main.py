@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# from PyQt5.QtCore import pyqtSlot
 # pyinstaller --add-data "resource;resource" -F -w -i resource/connect.ico  xx.py
 import sys, os
 from PyQt5.Qt import QThread, pyqtSignal
@@ -7,8 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtWidgets
 
-from need.MainUI import Ui_MainWindow
-from need.ImageConvert import ImageConvert
+from need import Ui_MainWindow, ImageConvert, Const
 
 
 class WorkThread(QThread):
@@ -35,12 +33,11 @@ class WorkThread(QThread):
 
     def convert_all(self, path, check):
         if os.path.isfile(path):
-            if path.rsplit(".", 1)[1].lower() in self.ImageConvertObj.ext:
+            if path.rsplit(".", 1)[1].upper() in Const.ext:
                 self.ImageConvertObj.convert(path, check, self.log)
                 self.trigger.emit(self.info, 0)
         else:
-            self.ImageConvertObj.find_all_image(path)
-            for img in self.ImageConvertObj.image_list:
+            for img in self.ImageConvertObj.find_all_image(path):
                 self.ImageConvertObj.convert(img, check, self.log)
                 self.trigger.emit(self.info, 0)
 
@@ -68,7 +65,7 @@ class AppMainWin(QMainWindow, Ui_MainWindow):
         if self.checkBox_2.isChecked():
             file_name = QtWidgets.QFileDialog.getExistingDirectory(self, "选取图片文件夹", "./")
         else:
-            file_type = "图片文件(*.jpg;*.jpeg;*.png;*.bmp;*.heic;*.webp);;所有文件(*)"
+            file_type = f"图片文件({'*.' + ';*.'.join(Const.ext)});;所有文件(*)"
             file_name, file_type = QtWidgets.QFileDialog.getOpenFileName(self, "选取图片", './', file_type)
 
         file_name = file_name.replace('/', '\\')
