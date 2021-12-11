@@ -50,10 +50,15 @@ class ImageConvert():
                 # https://www.osgeo.cn/pillow/handbook/image-file-formats.html#jpeg
                 info = image.info
                 exif = info.get('exif')
-                if exif is not None:
-                    image.save(new_path, format='JPEG', quality=95, exif=exif)
+                icc_profile = info.get('icc_profile')
+                if exif is not None and icc_profile is not None:
+                    image.save(new_path, format='jpeg', quality=95, icc_profile=icc_profile, exif=exif)
+                elif exif is not None:
+                    image.save(new_path, format='jpeg', quality=95, exif=exif)
+                elif icc_profile is not None:
+                    image.save(new_path, format='jpeg', quality=95, icc_profile=icc_profile)
                 else:
-                    image.save(new_path, format='JPEG', quality=95)
+                    image.save(new_path, format='jpeg', quality=95)
                 printf(f'{self._count} {filepath}  {fmt}\t->\t{new_path}')
         except Exception as e:
             printf(f'{filepath}  报错: {e}')
