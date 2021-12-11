@@ -6,9 +6,8 @@ from .constants import *
 from .reader import *
 from .writer import *
 
-# version_path = os.path.dirname(os.path.abspath(__file__)) + "/data/version.txt"
-# with open(version_path) as f:
-#     __version__ = f.read().strip()
+# https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyheif
+# https://pypi.org/project/pyheif/
 
 __version__ = '0.6.0'
 
