@@ -1,0 +1,12 @@
+cffi==1.15.0
+Pillow==8.4.0
+#pyheif @ file:///E:/DOWNLOAD/pyheif-0.6.0-cp37-cp37m-win_amd64.whl
+PyQt5==5.15.6
+whatimage==0.0.3
+#nuitka 打包
+# https://zhuanlan.zhihu.com/p/165978688
+# --nofollow-imports  用于已安装相关依赖情况下使用
+#nuitka打包相对来说是比较耗费时间的，特别是针对像pandas这样的大家伙，所以在最终发布之前，可以暂时不对这些库进行打包（--nofollow-imports），而是将这些库手动拷贝到搜索路径中，比如exe同级目录。只要能够找到这些库，程序就能正常运行，否则会提示no module named xxx
+# --include-data-dir    资源路径，如图标、配置文件等       
+# https://zhuanlan.zhihu.com/p/165618241
+
