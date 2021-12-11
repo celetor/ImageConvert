@@ -47,6 +47,7 @@ class ImageConvert():
 
                 if image.mode != 'RGB':
                     image = image.convert("RGB")
+                # https://www.osgeo.cn/pillow/handbook/image-file-formats.html#jpeg
                 info = image.info
                 exif = info.get('exif')
                 if exif is not None:
