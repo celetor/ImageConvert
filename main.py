@@ -211,6 +211,7 @@ class AppMainWin(QMainWindow, Ui_MainWindow):
         self.textEdit.setText('')
 
 
+# pyinstaller在onefile模式下对资源路径的定位
 def get_resource_path(relative_path):  # 利用此函数实现资源路径的定位
     if getattr(sys, "frozen", False):
         base_path = sys._MEIPASS  # 获取临时资源
