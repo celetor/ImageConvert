@@ -1,9 +1,17 @@
 cffi==1.15.0
 piexif==1.1.3
 Pillow==8.4.0
+pycparser==2.21
 PyQt5==5.15.6
-#pyheif
-#nuitka 打包
+PyQt5-Qt5==5.15.2
+PyQt5-sip==12.9.0
+
+#pyheif @ https://download.lfd.uci.edu/pythonlibs/w6tyco5e/pyheif-0.6.1-cp38-cp38-win_amd64.whl
+# https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyheif
+# https://pypi.org/project/pyheif/
+# other lib: https://pypi.org/project/pillow-heif/
+
+# nuitka 打包
 # https://zhuanlan.zhihu.com/p/165978688
 #nuitka打包相对来说是比较耗费时间的，特别是针对像pandas这样的大家伙，所以在最终发布之前，可以暂时不对这些库进行打包（--nofollow-imports），而是将这些库手动拷贝到搜索路径中，比如exe同级目录。只要能够找到这些库，程序就能正常运行，否则会提示no module named xxx
 # --nofollow-imports  用于已安装相关依赖情况下使用,会使用python.dll调用，编译后配合everything  https://www.voidtools.com/zh-cn/ 使用

@@ -50,7 +50,7 @@ class UndecodedHeifFile(HeifFile):
         return self
 
     def close(self):
-        # Don't call super().close() here, we don't src to free bytes.
+        # Don't call super().close() here, we don't need to free bytes.
         if hasattr(self, "_heif_handle"):
             del self._heif_handle
 

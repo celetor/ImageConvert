@@ -4,10 +4,6 @@ from .constants import *
 from .reader import *
 from .writer import *
 
-# https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyheif
-# https://pypi.org/project/pyheif/
-# other lib: https://pypi.org/project/pillow-heif/
-
 __version__ = '0.6.1'
 
 
