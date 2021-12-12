@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtWidgets
 
-from need import Ui_MainWindow, ImageConvert, Const
+from src import Ui_MainWindow, ImageConvert, Const
 
 
 class WorkThread(QThread):
