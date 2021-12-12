@@ -5,10 +5,10 @@ from copy import copy
 from weakref import WeakKeyDictionary
 
 import piexif
-import pyheif
 from cffi import FFI
 from PIL import Image, ImageFile
-from pyheif.error import HeifError
+from . import pyheif
+from .pyheif.error import HeifError
 
 ffi = FFI()
 _keep_refs = WeakKeyDictionary()
@@ -52,7 +52,7 @@ def _rotate_heif_file(heif):
     loading to prevent unexpected rotation after resaving in other formats.
 
     And we come up to there is no reasons to force rotation of HEIF images
-    after loading since we need update EXIF anyway.
+    after loading since we src update EXIF anyway.
     """
     orientation = heif.transformations['orientation_tag']
     if not (1 <= orientation <= 8):
@@ -125,7 +125,7 @@ class HeifImageFile(ImageFile.ImageFile):
             # ISO/IEC 14496-12 says: Restricted profile shall be of either
             # the Monochrome or Three‐Component Matrix‐Based class of
             # input profiles, as defined by ISO 15076‐1.
-            # We need to go deeper...
+            # We src to go deeper...
             if heif_file.color_profile['type'] in ('rICC', 'prof'):
                 self.info['icc_profile'] = heif_file.color_profile['data']
 
