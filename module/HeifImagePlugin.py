@@ -52,7 +52,7 @@ def _rotate_heif_file(heif):
     loading to prevent unexpected rotation after resaving in other formats.
 
     And we come up to there is no reasons to force rotation of HEIF images
-    after loading since we src update EXIF anyway.
+    after loading since we need update EXIF anyway.
     """
     orientation = heif.transformations['orientation_tag']
     if not (1 <= orientation <= 8):
@@ -125,7 +125,7 @@ class HeifImageFile(ImageFile.ImageFile):
             # ISO/IEC 14496-12 says: Restricted profile shall be of either
             # the Monochrome or Three‐Component Matrix‐Based class of
             # input profiles, as defined by ISO 15076‐1.
-            # We src to go deeper...
+            # We need to go deeper...
             if heif_file.color_profile['type'] in ('rICC', 'prof'):
                 self.info['icc_profile'] = heif_file.color_profile['data']
 
