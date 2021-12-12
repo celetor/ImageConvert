@@ -43,13 +43,14 @@ class WorkThread(QThread):
 
     def run(self):
         self.convert_all(self.file_path, self.flag)
-        self.trigger.emit('*' * 52 + '任务完成' + '*' * 52, 1)
+        self.trigger.emit('**' * 60, 1)
 
 
 class AppMainWin(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(AppMainWin, self).__init__(parent)
         self.setupUi(self)
+        self.stateBar = self.statusBar()
         self.signal_connect_slot()
 
     def signal_connect_slot(self):
@@ -82,13 +83,14 @@ class AppMainWin(QMainWindow, Ui_MainWindow):
         path = self.lineEdit.text()
         # 是否覆盖原图
         check = self.checkBox.isChecked()
-
+        self.stateBar.showMessage('正在转换......')
         self.work_thread.set_info(path, check)
         self.work_thread.start()
 
     def show_log(self, text, number):
-        self.textEdit.append(text)
+        self.textEdit.append(text + '\n')
         if number == 1:
+            self.stateBar.showMessage('转换完成!')
             self.checkBox.setEnabled(True)
             self.checkBox_2.setEnabled(True)
             self.pushButton.setEnabled(True)
