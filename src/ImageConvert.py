@@ -18,7 +18,7 @@ class ImageConvert():
             dir_sub = os.path.join(sub_url, direction_sub)
             if os.path.isfile(dir_sub):
                 right_split = dir_sub.rsplit(".", 1)
-                if len(right_split) > 1 and right_split[1].upper() in Const.ext:
+                if len(right_split) == 2 and right_split[1].upper() in Const.ext:
                     self._image_list.append(dir_sub)
             else:
                 self._find_image(dir_sub)
