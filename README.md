@@ -5,7 +5,7 @@
     ext = ['JPG', 'JPEG', 'PNG', 'BMP', 'HEIC', 'HEIF', 'HIF', 'AVIF', 'AV1', 'WEBP']
 ```
 
-### Windows10及以上打开HEIF图片需安装[HEVC解码器](https://www.free-codecs.com/download/hevc_video_extension.htm)
+* Windows10及以上打开HEIF图片需安装[HEVC解码器](https://www.free-codecs.com/download/hevc_video_extension.htm)
 
 ### 主要使用以下仓库
 
